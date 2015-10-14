@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SeedITRunner.class)
-@Expect(ValidationException.class)
+@Expect(value = ValidationException.class, step = Expect.TestingStep.INSTANTIATION)
 public class ValidationPlugin_ValidationErrorIT {
 
     @Inject
