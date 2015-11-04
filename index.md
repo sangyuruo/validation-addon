@@ -12,24 +12,19 @@ menu:
 
 SeedStack validation add-on allows developers to use Bean Validation 1.0 and 1.1.
 
-- Bean Validation 1.0 brings static validation aka JSR 303.
-- Bean Validation API 1.1 brings dynamic validation aka JSR 349. 
+* Bean Validation 1.0 brings static validation aka JSR 303.
+* Bean Validation API 1.1 brings dynamic validation aka JSR 349.
 
 Data validation is a very common concern at each and every layer of an application. As such, it has been standardized 
-through Bean Validation using JSR 303 and JSR 349. Implementation uses **Hibernate Validator** that you need to add explicitly in 
-your project:
+through Bean Validation using JSR 303 and JSR 349. Implementation uses **Hibernate Validator** that you need to add
+explicitly in your project:
 
-- Use Hibernate Validator version 4.x to support Bean Validation 1.0 only (like in strict JEE6 environments)
-- Use Hibernate Validator version 5.x to support Bean Validation 1.1
+* Use Hibernate Validator version 4.x to support Bean Validation 1.0 only (like in strict JEE6 environments)
+* Use Hibernate Validator version 5.x to support Bean Validation 1.1
 
 # Maven dependency
 
-To install Seed validation add-on just add the following dependency snippet:
-
-    <dependency>
-        <groupId>org.seedstack.addons</groupId>
-        <artifactId>validation</artifactId>
-    </dependency>
+{{< dependency g="org.seedstack.addons.validation" a="validation" >}}
 
 Please note that validation only works on instances managed by Seed (i.e. injectable instances).
 
