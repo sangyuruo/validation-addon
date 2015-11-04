@@ -8,8 +8,8 @@
 package org.seedstack.seed.validation.api;
 
 
-import org.seedstack.seed.core.api.ErrorCode;
-import org.seedstack.seed.core.api.SeedException;
+import org.seedstack.seed.ErrorCode;
+import org.seedstack.seed.SeedException;
 
 /**
  * Exception class for validation errors.

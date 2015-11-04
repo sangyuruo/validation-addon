@@ -12,7 +12,7 @@ import org.seedstack.seed.validation.internal.pojo.DummyServiceFieldValidation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.seed.it.SeedITRunner;
-import org.seedstack.seed.it.api.Expect;
+import org.seedstack.seed.it.Expect;
 
 import javax.inject.Inject;
 

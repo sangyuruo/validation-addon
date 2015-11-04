@@ -7,7 +7,7 @@
  */
 package org.seedstack.seed.validation.internal.pojo;
 
-import org.seedstack.seed.it.api.ITBind;
+import org.seedstack.seed.it.ITBind;
 
 import javax.validation.constraints.NotNull;
 

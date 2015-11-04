@@ -8,7 +8,7 @@
 package org.seedstack.seed.validation.internal;
 
 
-import org.seedstack.seed.core.api.ErrorCode;
+import org.seedstack.seed.ErrorCode;
 
 /**
  * Enumerates all validation error codes.

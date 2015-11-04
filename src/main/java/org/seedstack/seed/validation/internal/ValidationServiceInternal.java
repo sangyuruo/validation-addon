@@ -11,7 +11,7 @@ package org.seedstack.seed.validation.internal;
 import org.seedstack.seed.validation.api.ValidationException;
 import org.seedstack.seed.validation.api.ValidationService;
 import org.aopalliance.intercept.MethodInvocation;
-import org.seedstack.seed.core.api.SeedException;
+import org.seedstack.seed.SeedException;
 import org.seedstack.seed.core.utils.SeedReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
