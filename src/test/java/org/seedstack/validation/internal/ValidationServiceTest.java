@@ -1,0 +1,55 @@
+/**
+ * Copyright (c) 2013-2015, The SeedStack authors <http://seedstack.org>
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+package org.seedstack.validation.internal;
+
+
+import org.assertj.core.api.Assertions;
+import org.junit.Before;
+import org.junit.Test;
+
+import org.seedstack.validation.ValidationService;
+import org.seedstack.validation.internal.fixtures.BeanAll;
+import org.seedstack.validation.internal.fixtures.BeanField;
+import org.seedstack.validation.internal.fixtures.BeanMethodParam;
+import org.seedstack.validation.internal.fixtures.BeanMethodReturnType;
+import org.seedstack.validation.internal.fixtures.BeanNominal;
+
+public class ValidationServiceTest {
+	
+	private ValidationService underTest;
+
+	@Before
+	public void init ()
+	{
+		underTest = new ValidationServiceInternal();
+	}
+	
+	@Test
+	public void validationservice_should_check_object_is_candidate_for_static_validation() {
+		Assertions.assertThat ( underTest.candidateForStaticValidation ( BeanField.class)).isTrue();
+		Assertions.assertThat ( underTest.candidateForStaticValidation ( BeanAll.class)).isTrue();
+	}
+	
+	@Test
+	public void validationservice_should_check_object_is_candidate_for_dynamic_validation() {
+		Assertions.assertThat ( underTest.candidateForDynamicValidation ( BeanMethodParam.class)).isTrue();
+		Assertions.assertThat ( underTest.candidateForDynamicValidation ( BeanMethodReturnType.class)).isTrue();
+		Assertions.assertThat ( underTest.candidateForDynamicValidation ( BeanAll.class)).isTrue();
+	}
+	
+	@Test
+	public void validationservice_should_check_object_is_not_candidate_for_static_validation() {
+		Assertions.assertThat ( underTest.candidateForStaticValidation ( BeanNominal.class)).isFalse();
+	}
+	
+	@Test
+	public void validationservice_should_check_object_is_not_candidate_for_dynamic_validation() {
+		Assertions.assertThat ( underTest.candidateForDynamicValidation ( BeanNominal.class)).isFalse();
+	}
+
+}
