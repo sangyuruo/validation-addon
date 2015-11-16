@@ -4,7 +4,8 @@ addon: "Validation"
 repo: "https://github.com/seedstack/validation-addon"
 author: "SeedStack"
 description: "Provides bean validation 1.1 (JSR 303 & 349)."
-min-version: "15.7+"
+min-version: "15.11+"
+backend: true
 menu:
     AddonValidation:
         weight: 10
