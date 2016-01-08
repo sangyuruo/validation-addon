@@ -37,15 +37,6 @@ public class ValidationPlugin extends AbstractPlugin {
         return validationModule;
     }
 
-    /**
-     * Get the validation service.
-     *
-     * @return the validation service.
-     */
-    public ValidationService getValidationService() {
-        return validationService;
-    }
-
     @Override
     public void stop() {
         if (factory != null) {

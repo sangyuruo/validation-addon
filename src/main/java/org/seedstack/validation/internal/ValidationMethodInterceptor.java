@@ -7,19 +7,11 @@
  */
 package org.seedstack.validation.internal;
 
-
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.seedstack.validation.ValidationService;
 
-import static org.seedstack.seed.core.utils.SeedReflectionUtils.cleanProxy;
-
-
 class ValidationMethodInterceptor implements MethodInterceptor {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ValidationMethodInterceptor.class);
     private final ValidationService validationService;
 
     ValidationMethodInterceptor(ValidationService validationService) {
@@ -28,13 +20,7 @@ class ValidationMethodInterceptor implements MethodInterceptor {
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
-
-        try {
-            LOGGER.debug("Validation of {}", cleanProxy(invocation.getClass()));
-            return this.validationService.dynamicallyHandleAndProceed(invocation);
-        } finally {
-            LOGGER.debug("End of validation of {}", cleanProxy(invocation.getClass()));
-        }
+        return this.validationService.dynamicallyHandleAndProceed(invocation);
     }
 
 }

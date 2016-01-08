@@ -7,15 +7,8 @@
  */
 package org.seedstack.validation.internal;
 
-
 import org.seedstack.seed.ErrorCode;
 
-/**
- * Enumerates all validation error codes.
- *
- * @author epo.jemba@ext.mpsa.com
- * @author adrien.lauer@mpsa.com
- */
 enum ValidationErrorCode implements ErrorCode {
     VALIDATION_ISSUE,
     DYNAMIC_VALIDATION_IS_NOT_SUPPORTED
