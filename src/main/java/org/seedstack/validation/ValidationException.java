@@ -19,7 +19,7 @@ import org.seedstack.seed.SeedException;
 public class ValidationException extends SeedException {
     private static final long serialVersionUID = 1L;
 
-	protected ValidationException(ErrorCode errorCode) {
+	public ValidationException(ErrorCode errorCode) {
 		super(errorCode);
 	}
 }

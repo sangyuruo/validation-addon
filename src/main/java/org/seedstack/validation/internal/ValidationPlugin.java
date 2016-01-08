@@ -30,13 +30,10 @@ public class ValidationPlugin extends AbstractPlugin {
 
     @Override
     public Object nativeUnitModule() {
-
         if (validationModule == null) {
             factory = Validation.buildDefaultValidatorFactory();
-
             validationModule = new ValidationModule(factory, validationService);
         }
-
         return validationModule;
     }
 
@@ -51,10 +48,8 @@ public class ValidationPlugin extends AbstractPlugin {
 
     @Override
     public void stop() {
-
         if (factory != null) {
             factory.close();
         }
-
     }
 }
