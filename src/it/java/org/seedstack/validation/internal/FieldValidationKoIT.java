@@ -7,12 +7,12 @@
  */
 package org.seedstack.validation.internal;
 
-import org.seedstack.validation.ValidationException;
-import org.seedstack.validation.internal.pojo.DummyServiceFieldValidation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.seed.it.Expect;
+import org.seedstack.seed.it.SeedITRunner;
+import org.seedstack.validation.ValidationException;
+import org.seedstack.validation.internal.pojo.FieldValidationKO;
 
 import javax.inject.Inject;
 
@@ -20,10 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SeedITRunner.class)
 @Expect(value = ValidationException.class, step = Expect.TestingStep.INSTANTIATION)
-public class ValidationPlugin_ValidationErrorIT {
+public class FieldValidationKoIT {
 
     @Inject
-    DummyServiceFieldValidation serviceField;
+    FieldValidationKO serviceField;
 
     @Test
     public void trigger() {

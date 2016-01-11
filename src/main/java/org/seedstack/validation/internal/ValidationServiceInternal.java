@@ -33,6 +33,7 @@ import java.util.Set;
  * Handles static validation, and "by contract" validation thanks to Validator and ExecutableValidator.
  */
 class ValidationServiceInternal implements ValidationService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(ValidationServiceInternal.class);
 
     @Inject
@@ -46,37 +47,39 @@ class ValidationServiceInternal implements ValidationService {
         Set<ConstraintViolation<T>> constraintViolations = validator.validate(candidate);
 
         if (!constraintViolations.isEmpty()) {
-
-            ValidationException newException = SeedException.createNew(ValidationException.class, ValidationErrorCode.VALIDATION_ISSUE);
-            StringBuffer exceptionMessage = new StringBuffer();
-            exceptionMessage.append("Constraint violations on ");
-            int i = 1;
-            boolean first = true;
-
-            for (ConstraintViolation<T> violation : constraintViolations) {
-
-                LOGGER.debug("<violation {} > ", i);
-                LOGGER.debug("{} : {}", violation.getMessage(), violation.getInvalidValue());
-                Class<?> rootBeanClass = SeedReflectionUtils.cleanProxy(violation.getRootBeanClass());
-                LOGGER.debug("Path : {}.{}", rootBeanClass.getCanonicalName(), violation.getPropertyPath());
-                LOGGER.debug("</violation> ");
-
-                if (first) {
-                    exceptionMessage.append(rootBeanClass.getName()).append("\n");
-                    first = false;
-                }
-                exceptionMessage.append("\t").append(violation.getPropertyPath()).append(" - ").append(violation.getMessage())
-                        .append(", but ").append(violation.getInvalidValue()).append(" was found.\n");
-
-                ++i;
-            }
-
-            newException.put("message", exceptionMessage);
-            newException.put(JAVAX_VALIDATION_CONSTRAINT_VIOLATIONS, constraintViolations);
-            throw newException;
+            throw buildValidationException(constraintViolations);
         }
     }
 
+    private <T> ValidationException buildValidationException(Set<ConstraintViolation<T>> constraintViolations) {
+        ValidationException newException = SeedException.createNew(ValidationException.class, ValidationErrorCode.VALIDATION_ISSUE);
+        StringBuffer exceptionMessage = new StringBuffer();
+        exceptionMessage.append("Constraint violations on ");
+        int i = 1;
+        boolean first = true;
+
+        for (ConstraintViolation<T> violation : constraintViolations) {
+
+            LOGGER.debug("<violation {} > ", i);
+            LOGGER.debug("{} : {}", violation.getMessage(), violation.getInvalidValue());
+            Class<?> rootBeanClass = SeedReflectionUtils.cleanProxy(violation.getRootBeanClass());
+            LOGGER.debug("Path : {}.{}", rootBeanClass.getCanonicalName(), violation.getPropertyPath());
+            LOGGER.debug("</violation> ");
+
+            if (first) {
+                exceptionMessage.append(rootBeanClass.getName()).append("\n");
+                first = false;
+            }
+            exceptionMessage.append("\t").append(violation.getPropertyPath()).append(" - ").append(violation.getMessage())
+                    .append(", but ").append(violation.getInvalidValue()).append(" was found.\n");
+
+            ++i;
+        }
+
+        newException.put("message", exceptionMessage);
+        newException.put(JAVAX_VALIDATION_CONSTRAINT_VIOLATIONS, constraintViolations);
+        return newException;
+    }
 
 
     @Override

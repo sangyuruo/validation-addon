@@ -11,10 +11,6 @@ import javax.validation.constraints.AssertFalse;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 
-/**
- * @author pierre.thirouin@ext.mpsa.com
- *         14/10/2014
- */
 public class Pojo {
 
     @Size(min = 5)
@@ -26,22 +22,29 @@ public class Pojo {
     @AssertFalse
     private boolean dead = true;
 
-    public static enum State {
+    public enum State {
         VALID,
         INVALID
     }
 
-
     public Pojo(State state) {
         if (State.INVALID.equals(state)) {
-            name = "yoda";
-            age = 10000;
-            dead = true;
+            createInvalidPojo();
         } else {
-            name = "yodaa";
-            age = 99;
-            dead = false;
+            createValidPojo();
         }
+    }
+
+    private void createValidPojo() {
+        name = "yodaa";
+        age = 99;
+        dead = false;
+    }
+
+    private void createInvalidPojo() {
+        name = "yoda";
+        age = 10000;
+        dead = true;
     }
 
     public String getName() {

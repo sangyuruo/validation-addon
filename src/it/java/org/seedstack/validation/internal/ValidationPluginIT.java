@@ -20,16 +20,16 @@ import javax.inject.Inject;
 public class ValidationPluginIT {
 
     @Inject
-    DummyServiceParamValidation serviceParam;
+    ParamValidation serviceParam;
 
     @Inject
-    DummyServiceFieldValidationOK serviceField;
+    FieldValidationOK serviceField;
 
     @Inject
-    DummyServiceParamReturnType serviceReturnType;
+    ParamReturnType serviceReturnType;
 
     @Inject
-    DummyServiceWithoutValidation serviceWithoutValidation;
+    WithoutValidation serviceWithoutValidation;
 
     @Test
     public void services_are_well_injected() {

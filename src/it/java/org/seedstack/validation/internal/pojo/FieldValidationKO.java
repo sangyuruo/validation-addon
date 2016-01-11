@@ -9,17 +9,16 @@ package org.seedstack.validation.internal.pojo;
 
 import org.seedstack.seed.it.ITBind;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
-
 @ITBind
-public class DummyServiceParamValidation {
+public class FieldValidationKO {
 
-    public void validateNotNullParam(@NotNull Object param) {
-    }
+    @NotNull
+    private Object param;
 
-    public void validateValidParam(@Valid Pojo param) {
+    public void doSomethingAwesome(Object param) {
+        this.param = param;
     }
 }

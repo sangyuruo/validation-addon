@@ -17,6 +17,7 @@ import java.lang.reflect.Method;
  * @author epo.jemba@ext.mpsa.com
  */
 public interface ValidationService {
+
     String JAVAX_VALIDATION_CONSTRAINT_VIOLATIONS = "Set<javax.validation.ConstraintViolation>";
 
     /**

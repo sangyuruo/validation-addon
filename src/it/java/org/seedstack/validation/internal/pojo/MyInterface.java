@@ -7,14 +7,12 @@
  */
 package org.seedstack.validation.internal.pojo;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Null;
+import javax.validation.constraints.Min;
 
-public class PojoWithDeepValidation {
+public interface MyInterface {
 
-    @Null
-    String str = "should be null";
+    @Min(1)
+    int getColor();
 
-    @Valid
-    private Pojo pojo = new Pojo(Pojo.State.INVALID);
+    void setColor(int color);
 }

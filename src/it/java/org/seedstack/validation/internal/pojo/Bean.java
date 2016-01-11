@@ -7,19 +7,18 @@
  */
 package org.seedstack.validation.internal.pojo;
 
-import org.seedstack.seed.it.ITBind;
+import javax.validation.constraints.Max;
 
-import javax.validation.constraints.NotNull;
+public class Bean {
 
+    private int hour;
 
+    @Max(24)
+    public int getHour() {
+        return hour;
+    }
 
-@ITBind
-public class DummyServiceFieldValidationOK {
-
-    @NotNull
-    private Object param = new Object();
-
-    public void doSomethingAwesome(Object param) {
-        this.param = param;
+    public void setHour(int hour) {
+        this.hour = hour;
     }
 }

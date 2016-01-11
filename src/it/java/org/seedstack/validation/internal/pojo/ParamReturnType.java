@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 
 
 @ITBind
-public class DummyServiceParamReturnType {
+public class ParamReturnType {
 
     @NotNull
     public Object validateNotNullReturn(Object param) {
