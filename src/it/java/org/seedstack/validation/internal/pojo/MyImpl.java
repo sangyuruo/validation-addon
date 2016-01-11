@@ -7,18 +7,17 @@
  */
 package org.seedstack.validation.internal.pojo;
 
-import org.seedstack.seed.it.ITBind;
+public class MyImpl implements MyInterface {
 
-import javax.validation.constraints.NotNull;
+    private int color;
 
+    @Override
+    public int getColor() {
+        return color;
+    }
 
-@ITBind
-public class DummyServiceFieldValidation {
-
-    @NotNull
-    private Object param;
-
-    public void doSomethingAwesome(Object param) {
-        this.param = param;
+    @Override
+    public void setColor(int color) {
+        this.color = color;
     }
 }

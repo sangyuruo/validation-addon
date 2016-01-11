@@ -9,56 +9,47 @@ package org.seedstack.validation.internal.fixtures;
 
 
 public class BeanNominal {
-	    private int age;
+    private int age;
 
-	    private Long longNumber;
+    private Long longNumber;
 
-	    private String name;
+    private String name;
 
-	    private String firstName;
-	    
-	    public BeanNominal()
-	    {
-	    }
+    private String firstName;
 
-	    public int getAge()
-	    {
-	        return age;
-	    }
+    public BeanNominal() {
+    }
 
-	    public void setAge(int age)
-	    {
-	        this.age = age;
-	    }
+    public int getAge() {
+        return age;
+    }
 
-	    public String getName()
-	    {
-	        return name;
-	    }
+    public void setAge(int age) {
+        this.age = age;
+    }
 
-	    public void setName(String name)
-	    {
-	        this.name = name;
-	    }
+    public String getName() {
+        return name;
+    }
 
-	    public String getFirstName()
-	    {
-	        return firstName;
-	    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	    public void setFirstName(String firstName)
-	    {
-	        this.firstName = firstName;
-	    }
+    public String getFirstName() {
+        return firstName;
+    }
 
-	    public Long getLongNumber()
-	    {
-	        return longNumber;
-	    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	    public void setLongNumber(Long longNumber)
-	    {
-	        this.longNumber = longNumber;
-	    }
+    public Long getLongNumber() {
+        return longNumber;
+    }
+
+    public void setLongNumber(Long longNumber) {
+        this.longNumber = longNumber;
+    }
 
 }

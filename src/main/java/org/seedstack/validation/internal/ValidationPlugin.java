@@ -7,7 +7,6 @@
  */
 package org.seedstack.validation.internal;
 
-import org.seedstack.validation.ValidationService;
 import io.nuun.kernel.core.AbstractPlugin;
 
 import javax.validation.Validation;
@@ -21,7 +20,7 @@ import javax.validation.ValidatorFactory;
 public class ValidationPlugin extends AbstractPlugin {
     private ValidationService validationService = new ValidationServiceInternal();
     private ValidationModule validationModule;
-    private ValidatorFactory factory;
+    private ValidatorFactory validatorFactory;
 
     @Override
     public String name() {
@@ -31,25 +30,16 @@ public class ValidationPlugin extends AbstractPlugin {
     @Override
     public Object nativeUnitModule() {
         if (validationModule == null) {
-            factory = Validation.buildDefaultValidatorFactory();
-            validationModule = new ValidationModule(factory, validationService);
+            validatorFactory = Validation.buildDefaultValidatorFactory();
+            validationModule = new ValidationModule(validatorFactory, validationService);
         }
         return validationModule;
     }
 
-    /**
-     * Get the validation service.
-     *
-     * @return the validation service.
-     */
-    public ValidationService getValidationService() {
-        return validationService;
-    }
-
     @Override
     public void stop() {
-        if (factory != null) {
-            factory.close();
+        if (validatorFactory != null) {
+            validatorFactory.close();
         }
     }
 }

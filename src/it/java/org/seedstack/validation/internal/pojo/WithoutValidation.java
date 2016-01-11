@@ -11,9 +11,8 @@ package org.seedstack.validation.internal.pojo;
 import org.seedstack.seed.it.ITBind;
 
 @ITBind
-public class DummyServiceWithoutValidation {
+public class WithoutValidation {
 
     public void doSomethingAweswome(Object param) {
-
     }
 }

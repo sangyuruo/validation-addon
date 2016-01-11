@@ -7,18 +7,17 @@
  */
 package org.seedstack.validation.internal;
 
-import org.seedstack.validation.ValidationException;
-import org.seedstack.validation.ValidationService;
-import org.seedstack.validation.internal.pojo.Pojo;
-import org.seedstack.validation.internal.pojo.PojoWithDeepValidation;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.seed.it.SeedITRunner;
+import org.seedstack.validation.internal.pojo.Bean;
+import org.seedstack.validation.internal.pojo.MyImpl;
+import org.seedstack.validation.internal.pojo.Pojo;
+import org.seedstack.validation.internal.pojo.PojoWithDeepValidation;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
-import java.util.Set;
+import javax.validation.ConstraintViolationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,35 +28,54 @@ public class ValidationServiceIT {
     ValidationService validationService;
 
     @Test
-    public void validation_service_is_well_injected() {
+    public void validationServiceIsInjected() {
         assertThat(validationService).isNotNull();
     }
 
     @Test
-    public void validation_service_work_nominally() {
+    public void throwsExceptionOnInvalidPojo() {
         try {
             validationService.staticallyHandle(new Pojo(Pojo.State.INVALID));
-
-            Assertions.failBecauseExceptionWasNotThrown(ValidationException.class);
-        } catch (ValidationException validationException) {
-            validationException.printStackTrace();
-            Set<ConstraintViolation<?>> constraintViolations = validationException.get(ValidationService.JAVAX_VALIDATION_CONSTRAINT_VIOLATIONS);
-
-            assertThat(constraintViolations.size()).isEqualTo(3);
+            Assertions.failBecauseExceptionWasNotThrown(ConstraintViolationException.class);
+        } catch (ConstraintViolationException exception) {
+            assertThat(exception.getConstraintViolations()).hasSize(3);
         }
     }
 
     @Test
-    public void validation_on_cascade() {
+    public void doNothingOnValidPojo() {
+        validationService.staticallyHandle(new Pojo(Pojo.State.VALID));
+    }
+
+    @Test
+    public void throwsExceptionOnDeepValidation() {
         try {
             validationService.staticallyHandle(new PojoWithDeepValidation());
+            Assertions.failBecauseExceptionWasNotThrown(ConstraintViolationException.class);
+        } catch (ConstraintViolationException exception) {
+            assertThat(exception.getConstraintViolations()).hasSize(4);
+        }
+    }
 
-            Assertions.failBecauseExceptionWasNotThrown(ValidationException.class);
-        } catch (ValidationException validationException) {
-            validationException.printStackTrace();
-            Set<ConstraintViolation<?>> constraintViolations = validationException.get(ValidationService.JAVAX_VALIDATION_CONSTRAINT_VIOLATIONS);
+    @Test
+    public void validationShouldWorkOnInterface() {
+        try {
+            validationService.staticallyHandle(new MyImpl());
+            Assertions.failBecauseExceptionWasNotThrown(ConstraintViolationException.class);
+        } catch (ConstraintViolationException exception) {
+            assertThat(exception.getConstraintViolations()).hasSize(1);
+        }
+    }
 
-            assertThat(constraintViolations.size()).isEqualTo(4);
+    @Test
+    public void validationShouldWorkOnGetter() {
+        try {
+            Bean candidate = new Bean();
+            candidate.setHour(25);
+            validationService.staticallyHandle(candidate);
+            Assertions.failBecauseExceptionWasNotThrown(ConstraintViolationException.class);
+        } catch (ConstraintViolationException exception) {
+            assertThat(exception.getConstraintViolations()).hasSize(1);
         }
     }
 }

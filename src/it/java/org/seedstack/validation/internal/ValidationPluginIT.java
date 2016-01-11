@@ -7,7 +7,6 @@
  */
 package org.seedstack.validation.internal;
 
-import org.seedstack.validation.ValidationException;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,21 +14,22 @@ import org.seedstack.seed.it.SeedITRunner;
 import org.seedstack.validation.internal.pojo.*;
 
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
 
 @RunWith(SeedITRunner.class)
 public class ValidationPluginIT {
 
     @Inject
-    DummyServiceParamValidation serviceParam;
+    ParamValidation serviceParam;
 
     @Inject
-    DummyServiceFieldValidationOK serviceField;
+    FieldValidationOK serviceField;
 
     @Inject
-    DummyServiceParamReturnType serviceReturnType;
+    ParamReturnType serviceReturnType;
 
     @Inject
-    DummyServiceWithoutValidation serviceWithoutValidation;
+    WithoutValidation serviceWithoutValidation;
 
     @Test
     public void services_are_well_injected() {
@@ -44,7 +44,7 @@ public class ValidationPluginIT {
         serviceParam.validateNotNullParam("");
     }
 
-    @Test(expected = ValidationException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void param_not_null_validations_are_well_intercepted() {
         serviceParam.validateNotNullParam(null);
     }
@@ -55,7 +55,7 @@ public class ValidationPluginIT {
     }
 
 
-    @Test(expected = ValidationException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void param_valid_validations_are_well_intercepted() {
         serviceParam.validateValidParam(new Pojo(Pojo.State.INVALID));
     }
@@ -65,7 +65,7 @@ public class ValidationPluginIT {
         serviceReturnType.validateNotNullReturn("");
     }
 
-    @Test(expected = ValidationException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void not_null_return_validations_are_well_intercepted() {
         serviceReturnType.validateNotNullReturn(null);
     }
@@ -75,7 +75,7 @@ public class ValidationPluginIT {
         serviceReturnType.validateValidReturn(Pojo.State.VALID);
     }
 
-    @Test(expected = ValidationException.class)
+    @Test(expected = ConstraintViolationException.class)
     public void valid_return_validations_are_well_intercepted() {
         serviceReturnType.validateValidReturn(Pojo.State.INVALID);
     }

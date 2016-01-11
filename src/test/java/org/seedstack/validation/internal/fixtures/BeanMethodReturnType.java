@@ -7,72 +7,60 @@
  */
 package org.seedstack.validation.internal.fixtures;
 
+import org.hibernate.validator.constraints.Range;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Range;
-
 public class BeanMethodReturnType {
-	    
 
-	    private int age;
-	    
-	    private Long longNumber;
-	    
-	    private String name;
-	    
-	    private String firstName;
-	    
+    private int age;
 
-	    @Range(min = 0, max = 200)
-	    public int getAge()
-	    {
-	        return age;
-	    }
+    private Long longNumber;
 
-	    public void setAge( int age)
-	    {
-	        this.age = age;
-	    }
+    private String name;
 
-	    @NotNull(message = "Nom obligatoire")  @Size(min = 1, max = 10)
-	    public String getName()
-	    {
-	        return name;
-	    }
+    private String firstName;
 
-	    public void setName(
-	    		 
-	    		String name
-	    		)
-	    {
-	        this.name = name;
-	    }
+    @Range(min = 0, max = 200)
+    public int getAge() {
+        return age;
+    }
 
-	    @NotNull(groups = { Groupe1Checks.class })
-	    public String getFirstName()
-	    {
-	        return firstName;
-	    }
+    public void setAge(int age) {
+        this.age = age;
+    }
 
-	    public void setFirstName ( 
-	    		
-	    		String firstName )
-	    {
-	        this.firstName = firstName;
-	    }
+    @NotNull(message = "Nom obligatoire")
+    @Size(min = 1, max = 10)
+    public String getName() {
+        return name;
+    }
 
-	    @NotNull @Min(value = 10L) @Max(value = 999999999999999999L)
-	    public Long getLongNumber()
-	    {
-	        return longNumber;
-	    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	    public void setLongNumber( Long longNumber )
-	    {
-	        this.longNumber = longNumber;
-	    }
+    @NotNull(groups = {Group1Checks.class})
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    @NotNull
+    @Min(value = 10L)
+    @Max(value = 999999999999999999L)
+    public Long getLongNumber() {
+        return longNumber;
+    }
+
+    public void setLongNumber(Long longNumber) {
+        this.longNumber = longNumber;
+    }
 
 }

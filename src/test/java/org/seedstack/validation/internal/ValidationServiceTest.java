@@ -11,45 +11,38 @@ package org.seedstack.validation.internal;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
-
-import org.seedstack.validation.ValidationService;
-import org.seedstack.validation.internal.fixtures.BeanAll;
-import org.seedstack.validation.internal.fixtures.BeanField;
-import org.seedstack.validation.internal.fixtures.BeanMethodParam;
-import org.seedstack.validation.internal.fixtures.BeanMethodReturnType;
-import org.seedstack.validation.internal.fixtures.BeanNominal;
+import org.seedstack.validation.internal.fixtures.*;
 
 public class ValidationServiceTest {
-	
-	private ValidationService underTest;
 
-	@Before
-	public void init ()
-	{
-		underTest = new ValidationServiceInternal();
-	}
-	
-	@Test
-	public void validationservice_should_check_object_is_candidate_for_static_validation() {
-		Assertions.assertThat ( underTest.candidateForStaticValidation ( BeanField.class)).isTrue();
-		Assertions.assertThat ( underTest.candidateForStaticValidation ( BeanAll.class)).isTrue();
-	}
-	
-	@Test
-	public void validationservice_should_check_object_is_candidate_for_dynamic_validation() {
-		Assertions.assertThat ( underTest.candidateForDynamicValidation ( BeanMethodParam.class)).isTrue();
-		Assertions.assertThat ( underTest.candidateForDynamicValidation ( BeanMethodReturnType.class)).isTrue();
-		Assertions.assertThat ( underTest.candidateForDynamicValidation ( BeanAll.class)).isTrue();
-	}
-	
-	@Test
-	public void validationservice_should_check_object_is_not_candidate_for_static_validation() {
-		Assertions.assertThat ( underTest.candidateForStaticValidation ( BeanNominal.class)).isFalse();
-	}
-	
-	@Test
-	public void validationservice_should_check_object_is_not_candidate_for_dynamic_validation() {
-		Assertions.assertThat ( underTest.candidateForDynamicValidation ( BeanNominal.class)).isFalse();
-	}
+    private ValidationService underTest;
+
+    @Before
+    public void init() {
+        underTest = new ValidationServiceInternal();
+    }
+
+    @Test
+    public void isCandidateForStaticValidation() {
+        Assertions.assertThat(underTest.candidateForStaticValidation(BeanField.class)).isTrue();
+        Assertions.assertThat(underTest.candidateForStaticValidation(BeanAll.class)).isTrue();
+    }
+
+    @Test
+    public void isNotCandidateForStaticValidation() {
+        Assertions.assertThat(underTest.candidateForStaticValidation(BeanNominal.class)).isFalse();
+    }
+
+    @Test
+    public void isCandidateForDynamicValidation() {
+        Assertions.assertThat(underTest.candidateForDynamicValidation(BeanMethodParam.class)).isTrue();
+        Assertions.assertThat(underTest.candidateForDynamicValidation(BeanMethodReturnType.class)).isTrue();
+        Assertions.assertThat(underTest.candidateForDynamicValidation(BeanAll.class)).isTrue();
+    }
+
+    @Test
+    public void isNotCandidateForDynamicValidation() {
+        Assertions.assertThat(underTest.candidateForDynamicValidation(BeanNominal.class)).isFalse();
+    }
 
 }

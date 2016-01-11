@@ -7,7 +7,7 @@
  */
 package org.seedstack.validation.internal;
 
-import org.seedstack.validation.internal.pojo.DummyServiceFieldValidationOK;
+import org.seedstack.validation.internal.pojo.FieldValidationOK;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,10 +16,10 @@ import org.seedstack.seed.it.SeedITRunner;
 import javax.inject.Inject;
 
 @RunWith(SeedITRunner.class)
-public class ValidationPlugin_ValidationOkIT {
+public class FieldValidationOkIT {
 
     @Inject
-    DummyServiceFieldValidationOK serviceField;
+    FieldValidationOK serviceField;
 
     @Test
     public void trigger() {

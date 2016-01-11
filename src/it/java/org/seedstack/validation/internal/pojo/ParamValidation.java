@@ -7,14 +7,18 @@
  */
 package org.seedstack.validation.internal.pojo;
 
+import org.seedstack.seed.it.ITBind;
+
 import javax.validation.Valid;
-import javax.validation.constraints.Null;
+import javax.validation.constraints.NotNull;
 
-public class PojoWithDeepValidation {
 
-    @Null
-    String str = "should be null";
+@ITBind
+public class ParamValidation {
 
-    @Valid
-    private Pojo pojo = new Pojo(Pojo.State.INVALID);
+    public void validateNotNullParam(@NotNull Object param) {
+    }
+
+    public void validateValidParam(@Valid Pojo param) {
+    }
 }

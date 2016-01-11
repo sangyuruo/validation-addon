@@ -15,11 +15,13 @@ import org.seedstack.seed.SeedException;
  * Exception class for validation errors.
  *
  * @author epo.jemba@ext.mpsa.com
+ * @deprecated This exception is no longer used and will be removed in the next version.
+ * Use the standard {@link javax.validation.ConstraintViolationException} instead.
  */
+@Deprecated
 public class ValidationException extends SeedException {
-    private static final long serialVersionUID = 1L;
 
-	public ValidationException(ErrorCode errorCode) {
-		super(errorCode);
-	}
+    public ValidationException(ErrorCode errorCode) {
+        super(errorCode);
+    }
 }
