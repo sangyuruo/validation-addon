@@ -7,68 +7,59 @@
  */
 package org.seedstack.validation.internal.fixtures;
 
+import org.hibernate.validator.constraints.Range;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Range;
-
 public class BeanField {
-	    @Range(min = 0, max = 200)
-	    private int age;
+    @Range(min = 0, max = 200)
+    private int age;
 
-	    @NotNull
-	    @Range(min = 10L, max = 999999999999999999L)
-	    private Long longNumber;
+    @NotNull
+    @Range(min = 10L, max = 999999999999999999L)
+    private Long longNumber;
 
-	    @NotNull(message = "Nom obligatoire")
-	    @Size(min = 1, max = 10)
-	    private String name;
+    @NotNull(message = "Nom obligatoire")
+    @Size(min = 1, max = 10)
+    private String name;
 
-	    @NotNull(groups = { Groupe1Checks.class })
-	    private String firstName;
-	    
-	    public BeanField()
-	    {
-	    }
+    @NotNull(groups = {Group1Checks.class})
+    private String firstName;
 
-	    public int getAge()
-	    {
-	        return age;
-	    }
+    public BeanField() {
+    }
 
-	    public void setAge(int age)
-	    {
-	        this.age = age;
-	    }
+    public int getAge() {
+        return age;
+    }
 
-	    public String getName()
-	    {
-	        return name;
-	    }
+    public void setAge(int age) {
+        this.age = age;
+    }
 
-	    public void setName(String name)
-	    {
-	        this.name = name;
-	    }
+    public String getName() {
+        return name;
+    }
 
-	    public String getFirstName()
-	    {
-	        return firstName;
-	    }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	    public void setFirstName(String firstName)
-	    {
-	        this.firstName = firstName;
-	    }
+    public String getFirstName() {
+        return firstName;
+    }
 
-	    public Long getLongNumber()
-	    {
-	        return longNumber;
-	    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	    public void setLongNumber(Long longNumber)
-	    {
-	        this.longNumber = longNumber;
-	    }
+    public Long getLongNumber() {
+        return longNumber;
+    }
+
+    public void setLongNumber(Long longNumber) {
+        this.longNumber = longNumber;
+    }
 
 }

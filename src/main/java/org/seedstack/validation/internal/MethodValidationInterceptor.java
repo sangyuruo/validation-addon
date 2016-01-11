@@ -9,12 +9,11 @@ package org.seedstack.validation.internal;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.seedstack.validation.ValidationService;
 
-class ValidationMethodInterceptor implements MethodInterceptor {
+class MethodValidationInterceptor implements MethodInterceptor {
     private final ValidationService validationService;
 
-    ValidationMethodInterceptor(ValidationService validationService) {
+    MethodValidationInterceptor(ValidationService validationService) {
         this.validationService = validationService;
     }
 

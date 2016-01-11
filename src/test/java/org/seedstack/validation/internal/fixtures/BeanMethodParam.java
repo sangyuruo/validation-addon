@@ -7,71 +7,56 @@
  */
 package org.seedstack.validation.internal.fixtures;
 
+import org.hibernate.validator.constraints.Range;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Range;
-
 public class BeanMethodParam {
     private int age;
-    
-    private Long longNumber;
-    
-    private String name;
-    
-    private String firstName;
-    
 
-    public int getAge()
-    {
+    private Long longNumber;
+
+    private String name;
+
+    private String firstName;
+
+
+    public int getAge() {
         return age;
     }
 
-    public void setAge(@Range(min = 0, max = 200) int age)
-    {
+    public void setAge(@Range(min = 0, max = 200) int age) {
         this.age = age;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(
-    		@NotNull(message = "Nom obligatoire")  @Size(min = 1, max = 10) // 
-    		String name
-    		)
-    {
+    public void setName(@NotNull(message = "Nom obligatoire") @Size(min = 1, max = 10) String name) {
         this.name = name;
     }
 
-    public String getFirstName()
-    {
+    public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName ( 
-    		@NotNull(groups = { Groupe1Checks.class }
-    		)
-    		String firstName )
-    {
+    public void setFirstName(@NotNull(groups = {Group1Checks.class}) String firstName) {
         this.firstName = firstName;
     }
 
-    public Long getLongNumber()
-    {
+    public Long getLongNumber() {
         return longNumber;
     }
 
     public void setLongNumber(
-    		@NotNull @Min(value = 10L) @Max(value = 999999999999999999L)
-    		Long longNumber)
-    {
+            @NotNull @Min(value = 10L) @Max(value = 999999999999999999L)
+            Long longNumber) {
         this.longNumber = longNumber;
     }
-	
-	
+
 
 }

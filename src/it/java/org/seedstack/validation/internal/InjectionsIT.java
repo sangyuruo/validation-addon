@@ -7,26 +7,31 @@
  */
 package org.seedstack.validation.internal;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.seedstack.seed.it.Expect;
 import org.seedstack.seed.it.SeedITRunner;
-import org.seedstack.validation.internal.pojo.FieldValidationKO;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolationException;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 @RunWith(SeedITRunner.class)
-@Expect(value = ConstraintViolationException.class, step = Expect.TestingStep.INSTANTIATION)
-public class FieldValidationKoIT {
+public class InjectionsIT {
 
     @Inject
-    FieldValidationKO serviceField;
+    private ValidatorFactory validatorFactory;
+
+    @Inject
+    private Validator validator;
 
     @Test
-    public void trigger() {
-        assertThat(serviceField).isNull();
+    public void isValidatorFactoryInjectable() {
+        Assertions.assertThat(validatorFactory).isNotNull();
+    }
+
+    @Test
+    public void isValidatorInjectable() {
+        Assertions.assertThat(validator).isNotNull();
     }
 }

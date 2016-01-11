@@ -8,125 +8,88 @@
 package org.seedstack.validation.internal;
 
 
-import org.seedstack.validation.ValidationException;
-import org.seedstack.validation.ValidationService;
 import org.aopalliance.intercept.MethodInvocation;
 import org.seedstack.seed.SeedException;
 import org.seedstack.seed.core.utils.SeedReflectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.validation.Constraint;
-import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
-import javax.validation.Validator;
+import javax.validation.*;
 import javax.validation.executable.ExecutableValidator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Set;
 
+import static org.seedstack.seed.core.utils.SeedReflectionUtils.cleanProxy;
 
 /**
  * Handles static validation, and "by contract" validation thanks to Validator and ExecutableValidator.
  */
 class ValidationServiceInternal implements ValidationService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ValidationServiceInternal.class);
-
     @Inject
-    private Validator validator;
-
-    @Inject @Nullable
-    private ExecutableValidator executableValidator;
+    private ValidatorFactory validatorFactory;
 
     @Override
     public <T> void staticallyHandle(T candidate) {
-        Set<ConstraintViolation<T>> constraintViolations = validator.validate(candidate);
+        Set<ConstraintViolation<T>> constraintViolations = validatorFactory.getValidator().validate(candidate);
+        throwsExceptionIfViolation(constraintViolations);
+    }
 
+    private <T> void throwsExceptionIfViolation(Set<ConstraintViolation<T>> constraintViolations) {
         if (!constraintViolations.isEmpty()) {
-            throw buildValidationException(constraintViolations);
+            throw new ConstraintViolationException(buildErrorMessage(constraintViolations), constraintViolations);
         }
     }
 
-    private <T> ValidationException buildValidationException(Set<ConstraintViolation<T>> constraintViolations) {
-        ValidationException newException = SeedException.createNew(ValidationException.class, ValidationErrorCode.VALIDATION_ISSUE);
-        StringBuffer exceptionMessage = new StringBuffer();
-        exceptionMessage.append("Constraint violations on ");
-        int i = 1;
+    private <T> String buildErrorMessage(Set<ConstraintViolation<T>> constraintViolations) {
+        StringBuilder errorMessage = new StringBuilder();
         boolean first = true;
-
         for (ConstraintViolation<T> violation : constraintViolations) {
-
-            LOGGER.debug("<violation {} > ", i);
-            LOGGER.debug("{} : {}", violation.getMessage(), violation.getInvalidValue());
-            Class<?> rootBeanClass = SeedReflectionUtils.cleanProxy(violation.getRootBeanClass());
-            LOGGER.debug("Path : {}.{}", rootBeanClass.getCanonicalName(), violation.getPropertyPath());
-            LOGGER.debug("</violation> ");
-
             if (first) {
-                exceptionMessage.append(rootBeanClass.getName()).append("\n");
+                addHeader(errorMessage, violation);
                 first = false;
             }
-            exceptionMessage.append("\t").append(violation.getPropertyPath()).append(" - ").append(violation.getMessage())
-                    .append(", but ").append(violation.getInvalidValue()).append(" was found.\n");
-
-            ++i;
+            addViolationMessage(errorMessage, violation);
         }
+        return errorMessage.toString();
+    }
 
-        newException.put("message", exceptionMessage);
-        newException.put(JAVAX_VALIDATION_CONSTRAINT_VIOLATIONS, constraintViolations);
-        return newException;
+    private <T> void addHeader(StringBuilder errorMessage, ConstraintViolation<T> violation) {
+        Class<?> rootBeanClass = cleanProxy(violation.getRootBeanClass());
+        errorMessage.append(rootBeanClass.getName());
+    }
+
+    private <T> void addViolationMessage(StringBuilder errorMessage, ConstraintViolation<T> violation) {
+        errorMessage.append("\n")
+                .append("\t").append(violation.getPropertyPath()).append(" - ").append(violation.getMessage());
     }
 
 
     @Override
     public Object dynamicallyHandleAndProceed(MethodInvocation invocation) throws Throwable {
+        ExecutableValidator executableValidator = validatorFactory.getValidator().forExecutables();
         if (executableValidator == null) {
             throw SeedException.createNew(ValidationErrorCode.DYNAMIC_VALIDATION_IS_NOT_SUPPORTED);
         }
+        // TODO : add support for constraint groups
 
-        // TODO : add groups
-        Object this1 = invocation.getThis();
-        Method method = invocation.getMethod();
-        Object[] arguments = invocation.getArguments();
-        Set<ConstraintViolation<Object>> parametersConstraintViolations = executableValidator.validateParameters(this1, method, arguments /*, groups */);
-
-        handleConstraintViolations(parametersConstraintViolations);
-
+        validateParameters(invocation, executableValidator);
         Object returnValue = invocation.proceed();
-
-        Set<ConstraintViolation<Object>> returnValueConstraintViolations = executableValidator.validateReturnValue(this1, method, returnValue /*, groups*/);
-
-        handleConstraintViolations(returnValueConstraintViolations);
-
+        validateReturnValue(invocation, executableValidator, returnValue);
         return returnValue;
     }
 
+    private void validateParameters(MethodInvocation invocation, ExecutableValidator executableValidator) {
+        Set<ConstraintViolation<Object>> parametersConstraintViolations = executableValidator
+                .validateParameters(invocation.getThis(), invocation.getMethod(), invocation.getArguments() /*, groups */);
+        throwsExceptionIfViolation(parametersConstraintViolations);
+    }
 
-    private void handleConstraintViolations(Set<ConstraintViolation<Object>> constraintViolations) {
-        if (!constraintViolations.isEmpty()) {
-            ValidationException newException = SeedException.createNew(ValidationException.class, ValidationErrorCode.VALIDATION_ISSUE);
-
-            int i = 0;
-            for (ConstraintViolation<Object> violation : constraintViolations) {
-
-                Class<?> rootBeanClass = SeedReflectionUtils.cleanProxy(violation.getRootBeanClass());
-
-                LOGGER.debug("<violation {} > ", i);
-                LOGGER.debug("{} : {}", violation.getMessage(), violation.getInvalidValue());
-                LOGGER.debug("Path : {}.{}", rootBeanClass.getCanonicalName(), violation.getPropertyPath());
-                LOGGER.debug("</violation> ");
-
-                newException.put(String.format("%d - %s", i, violation.getMessage()), violation.getInvalidValue());
-                newException.put(String.format("%d - Path", i), rootBeanClass + "." + violation.getPropertyPath());
-                ++i;
-            }
-
-            throw newException;
-        }
+    private void validateReturnValue(MethodInvocation invocation, ExecutableValidator executableValidator, Object returnValue) {
+        Set<ConstraintViolation<Object>> returnValueConstraintViolations = executableValidator
+                .validateReturnValue(invocation.getThis(), invocation.getMethod(), returnValue /*, groups*/);
+        throwsExceptionIfViolation(returnValueConstraintViolations);
     }
 
     @Override
@@ -179,6 +142,4 @@ class ValidationServiceInternal implements ValidationService {
         }
         return false;
     }
-
-
 }

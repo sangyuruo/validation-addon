@@ -13,9 +13,7 @@ import com.google.inject.Provides;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
-import com.google.inject.spi.ProvisionListener;
 import org.seedstack.seed.core.internal.CorePlugin;
-import org.seedstack.validation.ValidationService;
 import org.seedstack.validation.spi.ValidationConcern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,61 +27,50 @@ import java.lang.reflect.Method;
 class ValidationModule extends AbstractModule {
     private static final Logger LOGGER = LoggerFactory.getLogger(ValidationModule.class);
 
-    private final ValidatorFactory factory;
+    private final ValidatorFactory validatorFactory;
     private final ValidationService validationService;
 
-    private Validator validator;
-    private ExecutableValidator executableValidator;
-
-    ValidationModule(ValidatorFactory factory, ValidationService validationService) {
-        this.factory = factory;
+    ValidationModule(ValidatorFactory validatorFactory, ValidationService validationService) {
+        this.validatorFactory = validatorFactory;
         this.validationService = validationService;
     }
 
     @Override
     protected void configure() {
-        this.validator = factory.getValidator();
+        bind(ValidatorFactory.class).toInstance(validatorFactory);
         enableValidationOnInjectionPoints();
-        configureDynamicValidation();
-    }
-
-    private void enableValidationOnInjectionPoints() {
-        bindListener(staticMatcher(validationService), new ProvisionListener() {
-
-            @Override
-            public <A> void onProvision(ProvisionInvocation<A> provision) {
-                A injectee = provision.provision();
-                validationService.staticallyHandle(injectee);
-            }
-        });
-    }
-
-    private void configureDynamicValidation() {
-        try {
-            this.executableValidator = validator.forExecutables();
-        } catch (Throwable t) {
-            LOGGER.info("Unable to create the dynamic validator, support for dynamic validation disabled");
-            LOGGER.debug(CorePlugin.DETAILS_MESSAGE, t);
-        }
-
-        if (this.executableValidator != null) {
-            bindInterceptor(Matchers.any(), dynamicMatcher(validationService), new ValidationMethodInterceptor(validationService));
+        if (isDynamicValidationSupported()) {
+            configureDynamicValidation();
             requestInjection(validationService);
             bind(ValidationService.class).toInstance(validationService);
         }
     }
 
+    private void enableValidationOnInjectionPoints() {
+        bindListener(staticValidationMatcher(validationService), new StaticValidationProvisionListener(validationService));
+    }
+
+    private void configureDynamicValidation() {
+        bindInterceptor(Matchers.any(), dynamicValidationMatcher(validationService), new MethodValidationInterceptor(validationService));
+    }
+
+    private boolean isDynamicValidationSupported() {
+        ExecutableValidator executableValidator = null;
+        try {
+            executableValidator = validatorFactory.getValidator().forExecutables();
+        } catch (Throwable t) {
+            LOGGER.info("Unable to create the dynamic validator, support for dynamic validation disabled");
+            LOGGER.debug(CorePlugin.DETAILS_MESSAGE, t);
+        }
+        return executableValidator != null;
+    }
+
     @Provides
     Validator provideValidator() {
-        return validator;
+        return validatorFactory.getValidator();
     }
 
-    @Provides
-    ExecutableValidator provideExecutableValidator() {
-        return executableValidator;
-    }
-
-    private Matcher<? super Binding<?>> staticMatcher(final ValidationService validationService) {
+    private Matcher<? super Binding<?>> staticValidationMatcher(final ValidationService validationService) {
         return new AbstractMatcher<Binding<?>>() {
             @Override
             public boolean matches(Binding<?> t) {
@@ -92,7 +79,7 @@ class ValidationModule extends AbstractModule {
         };
     }
 
-    private Matcher<Method> dynamicMatcher(final ValidationService validationService) {
+    private Matcher<Method> dynamicValidationMatcher(final ValidationService validationService) {
         return new AbstractMatcher<Method>() {
             @Override
             public boolean matches(Method t) {
@@ -100,4 +87,5 @@ class ValidationModule extends AbstractModule {
             }
         };
     }
+
 }

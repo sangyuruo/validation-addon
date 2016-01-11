@@ -15,7 +15,10 @@ import java.lang.reflect.Method;
  * Interface for validation service.
  *
  * @author epo.jemba@ext.mpsa.com
+ * @deprecated ValidationService will be removed in the next version. Use {@link javax.validation.Validator} instead.
+ * It can be directly injected or retrieved through the {@link javax.validation.ValidatorFactory}.
  */
+@Deprecated
 public interface ValidationService {
 
     String JAVAX_VALIDATION_CONSTRAINT_VIOLATIONS = "Set<javax.validation.ConstraintViolation>";

@@ -9,10 +9,12 @@ package org.seedstack.validation.internal;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.seedstack.validation.ValidationException;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
+import java.util.HashSet;
 
 public class ValidationExceptionMapperTest {
 
@@ -24,7 +26,7 @@ public class ValidationExceptionMapperTest {
     @Test
     public void testReturnError400() {
         Response response = new ValidationExceptionMapper()
-                .toResponse(new ValidationException(ValidationErrorCode.VALIDATION_ISSUE));
+                .toResponse(new ConstraintViolationException("error message", new HashSet<ConstraintViolation<?>>()));
         Assertions.assertThat(response.getStatus()).isEqualTo(400);
     }
 }

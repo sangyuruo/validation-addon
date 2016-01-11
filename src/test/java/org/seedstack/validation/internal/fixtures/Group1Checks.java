@@ -5,10 +5,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-package org.seedstack.validation.internal;
+package org.seedstack.validation.internal.fixtures;
 
-import org.seedstack.seed.ErrorCode;
-
-enum ValidationErrorCode implements ErrorCode {
-    DYNAMIC_VALIDATION_IS_NOT_SUPPORTED
+public interface Group1Checks {
 }
