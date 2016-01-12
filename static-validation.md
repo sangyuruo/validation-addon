@@ -46,7 +46,7 @@ Beware that an invalid POJO injected at application startup will prevent it from
 A POJO instance can be validated at any time through Seed {{< java "org.seedstack.validation.ValidationService" >}}:
 
 ```java
-import org.seedstack.seed.validation.ValidationService;
+import org.seedstack.validation.ValidationService;
 ...
 @Inject
 ValidationService validationService;
@@ -88,10 +88,10 @@ try {
 If a validation error occurs, a {{< java "org.seedstack.validation.ValidationException" >}} will be thrown:
 
 ```ini
-org.seedstack.seed.validation.internal.ValidationException
+org.seedstack.validation.internal.ValidationException
 -------------------------------
-VALIDATION_ISSUE : org.seedstack.seed.validation.internal.ValidationErrorCode
-0 - Path=[class org.seedstack.seed.validation.internal.ValidationServiceIT$Pojo.name]
+VALIDATION_ISSUE : org.seedstack.validation.internal.ValidationErrorCode
+0 - Path=[class org.seedstack.validation.internal.ValidationServiceIT$Pojo.name]
 0 - size must be between 4 and 2147483647=[epo]
 Set<javax.validation.ConstraintViolation>=[[ConstraintViolationImpl{interpolatedMessage='size must be between 4 and 2147483647', \
 propertyPath=name, \
