@@ -7,16 +7,29 @@
  */
 package org.seedstack.validation.internal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
+public class ValidationExceptionMapper implements ExceptionMapper<ValidationException> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ValidationExceptionMapper.class);
 
     @Override
-    public Response toResponse(ConstraintViolationException exception) {
-        return Response.status(Response.Status.BAD_REQUEST).build();
+    public Response toResponse(ValidationException exception) {
+        if (exception instanceof ConstraintViolationException) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(exception.getMessage()).encoding(MediaType.TEXT_PLAIN).build();
+        } else {
+            LOGGER.error(exception.getMessage());
+            return Response.serverError().build();
+        }
     }
 }

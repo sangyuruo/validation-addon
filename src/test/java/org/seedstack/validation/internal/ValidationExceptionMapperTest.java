@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.util.HashSet;
@@ -28,5 +29,11 @@ public class ValidationExceptionMapperTest {
         Response response = new ValidationExceptionMapper()
                 .toResponse(new ConstraintViolationException("error message", new HashSet<ConstraintViolation<?>>()));
         Assertions.assertThat(response.getStatus()).isEqualTo(400);
+    }
+    @Test
+    public void testReturnError500() {
+        Response response = new ValidationExceptionMapper()
+                .toResponse(new ValidationException("error message"));
+        Assertions.assertThat(response.getStatus()).isEqualTo(500);
     }
 }
