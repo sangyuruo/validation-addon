@@ -1,3 +1,7 @@
+# Version 2.2.1 (?)
+
+* [chg] Validation plugin automatically disables itself if no validation API is present on the classpath.
+
 # Version 2.2.0 (2016-01-28)
 
 * [new] An `ExceptionMapper` for `ConstraintViolationException` is provided by default.
