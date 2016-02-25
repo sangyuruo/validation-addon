@@ -11,6 +11,7 @@ package org.seedstack.validation.internal;
 import org.aopalliance.intercept.MethodInvocation;
 import org.seedstack.seed.SeedException;
 import org.seedstack.seed.core.utils.SeedReflectionUtils;
+import org.seedstack.validation.api.VerboseConstraintViolationException;
 
 import javax.inject.Inject;
 import javax.validation.*;
@@ -22,9 +23,6 @@ import java.util.Set;
 
 import static org.seedstack.seed.core.utils.SeedReflectionUtils.cleanProxy;
 
-/**
- * Handles static validation, and "by contract" validation thanks to Validator and ExecutableValidator.
- */
 class ValidationServiceInternal implements ValidationService {
 
     @Inject
@@ -38,33 +36,9 @@ class ValidationServiceInternal implements ValidationService {
 
     private <T> void throwsExceptionIfViolation(Set<ConstraintViolation<T>> constraintViolations) {
         if (!constraintViolations.isEmpty()) {
-            throw new ConstraintViolationException(buildErrorMessage(constraintViolations), constraintViolations);
+            throw new VerboseConstraintViolationException(constraintViolations);
         }
     }
-
-    private <T> String buildErrorMessage(Set<ConstraintViolation<T>> constraintViolations) {
-        StringBuilder errorMessage = new StringBuilder();
-        boolean first = true;
-        for (ConstraintViolation<T> violation : constraintViolations) {
-            if (first) {
-                addHeader(errorMessage, violation);
-                first = false;
-            }
-            addViolationMessage(errorMessage, violation);
-        }
-        return errorMessage.toString();
-    }
-
-    private <T> void addHeader(StringBuilder errorMessage, ConstraintViolation<T> violation) {
-        Class<?> rootBeanClass = cleanProxy(violation.getRootBeanClass());
-        errorMessage.append(rootBeanClass.getName());
-    }
-
-    private <T> void addViolationMessage(StringBuilder errorMessage, ConstraintViolation<T> violation) {
-        errorMessage.append("\n")
-                .append("\t").append(violation.getPropertyPath()).append(" - ").append(violation.getMessage());
-    }
-
 
     @Override
     public Object dynamicallyHandleAndProceed(MethodInvocation invocation) throws Throwable {

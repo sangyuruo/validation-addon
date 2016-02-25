@@ -11,15 +11,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.seed.it.Expect;
 import org.seedstack.seed.it.SeedITRunner;
+import org.seedstack.validation.api.VerboseConstraintViolationException;
 import org.seedstack.validation.internal.pojo.FieldValidationKO;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolationException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SeedITRunner.class)
-@Expect(value = ConstraintViolationException.class, step = Expect.TestingStep.INSTANTIATION)
+@Expect(value = VerboseConstraintViolationException.class, step = Expect.TestingStep.INSTANTIATION)
 public class FieldValidationKoIT {
 
     @Inject
