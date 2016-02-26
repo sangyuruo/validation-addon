@@ -14,7 +14,6 @@ import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
 import org.seedstack.seed.core.internal.CorePlugin;
-import org.seedstack.validation.spi.ValidationConcern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

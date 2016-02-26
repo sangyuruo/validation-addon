@@ -6,8 +6,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 /**
- * Provides classes for extending validation.
+ * Provides classes for using validation.
  *
  * @author Pierre Thirouin
  */
-package org.seedstack.validation.spi;
+package org.seedstack.validation.api;

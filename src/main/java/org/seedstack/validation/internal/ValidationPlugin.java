@@ -11,6 +11,7 @@ import io.nuun.kernel.api.plugin.InitState;
 import io.nuun.kernel.api.plugin.context.InitContext;
 import io.nuun.kernel.core.AbstractPlugin;
 import org.seedstack.seed.core.utils.SeedReflectionUtils;
+import org.seedstack.validation.spi.ValidationProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,7 @@ import javax.validation.ValidatorFactory;
 /**
  * This plugin handles validation through jsr303 and jsr349.
  */
-public class ValidationPlugin extends AbstractPlugin {
+public class ValidationPlugin extends AbstractPlugin implements ValidationProvider {
     private static Logger logger = LoggerFactory.getLogger(ValidationPlugin.class);
     private ValidatorFactory validatorFactory = null;
 
@@ -56,11 +57,7 @@ public class ValidationPlugin extends AbstractPlugin {
         }
     }
 
-    /**
-     * Retrieves the {@link ValidatorFactory} initialized by the validation plugin.
-     *
-     * @return An instance of {@link ValidatorFactory} if validation is enabled, null otherwise.
-     */
+    @Override
     public ValidatorFactory getValidatorFactory() {
         return validatorFactory;
     }
