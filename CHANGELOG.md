@@ -1,6 +1,7 @@
-# Version 2.2.1 (?)
+# Version 2.3.0 (?)
 
 * [chg] Validation plugin automatically disables itself if no validation API is present on the classpath.
+* [new] Add a facet for providing the `ValidatorFactory` to other plugins.
 
 # Version 2.2.0 (2016-01-28)
 

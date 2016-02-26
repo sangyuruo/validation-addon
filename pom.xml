@@ -19,7 +19,7 @@
 
     <groupId>org.seedstack.addons.validation</groupId>
     <artifactId>validation</artifactId>
-    <version>2.2.1-SNAPSHOT</version>
+    <version>2.3.0-SNAPSHOT</version>
 
     <properties>
         <seed.version>2.2.0</seed.version>
@@ -59,6 +59,18 @@
                             <licenseMerge>IGNORED_LICENSE|MPL 1.1</licenseMerge>
                             <licenseMerge>IGNORED_LICENSE|LGPL 2.1</licenseMerge>
                         </licenseMerges>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.siom79.japicmp</groupId>
+                    <artifactId>japicmp-maven-plugin</artifactId>
+                    <configuration>
+                        <parameter>
+                            <excludes>
+                                <exclude>*.internal.*</exclude>
+                                <exclude>org.seedstack.validation.spi.ValidationConcern</exclude>
+                            </excludes>
+                        </parameter>
                     </configuration>
                 </plugin>
             </plugins>
