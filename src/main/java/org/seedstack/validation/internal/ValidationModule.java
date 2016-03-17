@@ -13,7 +13,7 @@ import com.google.inject.Provides;
 import com.google.inject.matcher.AbstractMatcher;
 import com.google.inject.matcher.Matcher;
 import com.google.inject.matcher.Matchers;
-import org.seedstack.seed.core.internal.CorePlugin;
+import org.seedstack.seed.core.utils.SeedLoggingUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,8 +58,7 @@ class ValidationModule extends AbstractModule {
         try {
             executableValidator = validatorFactory.getValidator().forExecutables();
         } catch (Throwable t) {
-            LOGGER.info("Unable to create the dynamic validator, support for dynamic validation disabled");
-            LOGGER.debug(CorePlugin.DETAILS_MESSAGE, t);
+            SeedLoggingUtils.logWarningWithDebugDetails(LOGGER, t, "Unable to create the dynamic validator, support for dynamic validation disabled");
         }
         return executableValidator != null;
     }
