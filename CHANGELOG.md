@@ -2,6 +2,7 @@
 
 * [chg] Validation plugin automatically disables itself if no validation API is present on the classpath.
 * [new] Add a facet for providing the `ValidatorFactory` to other plugins.
+* [chg] Update for SeedStack for 16.4
 
 # Version 2.2.0 (2016-01-28)
 
