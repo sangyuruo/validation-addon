@@ -7,14 +7,21 @@
  */
 package org.seedstack.validation.internal;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.seedstack.seed.it.SeedITRunner;
-import org.seedstack.validation.internal.pojo.*;
+import org.seedstack.validation.internal.pojo.CustomPojo;
+import org.seedstack.validation.internal.pojo.FieldValidationOK;
+import org.seedstack.validation.internal.pojo.ParamReturnType;
+import org.seedstack.validation.internal.pojo.ParamValidation;
+import org.seedstack.validation.internal.pojo.Pojo;
+import org.seedstack.validation.internal.pojo.WithoutValidation;
 
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SeedITRunner.class)
 public class ValidationPluginIT {
@@ -31,12 +38,15 @@ public class ValidationPluginIT {
     @Inject
     WithoutValidation serviceWithoutValidation;
 
+    @Inject
+    Validator validator;
+
     @Test
     public void services_are_well_injected() {
-        Assertions.assertThat(serviceParam).isNotNull();
-        Assertions.assertThat(serviceField).isNotNull();
-        Assertions.assertThat(serviceReturnType).isNotNull();
-        Assertions.assertThat(serviceWithoutValidation).isNotNull();
+        assertThat(serviceParam).isNotNull();
+        assertThat(serviceField).isNotNull();
+        assertThat(serviceReturnType).isNotNull();
+        assertThat(serviceWithoutValidation).isNotNull();
     }
 
     @Test
@@ -80,4 +90,9 @@ public class ValidationPluginIT {
         serviceReturnType.validateValidReturn(Pojo.State.INVALID);
     }
 
+    @Test
+    public void custom_validator() {
+        assertThat(validator.validate(new CustomPojo("abc")).size()).isEqualTo(1);
+        assertThat(validator.validate(new CustomPojo("ABC")).size()).isEqualTo(0);
+    }
 }
