@@ -2,9 +2,9 @@
 title: "Basics"
 name: "Validation"
 repo: "https://github.com/seedstack/validation-addon"
-author: "SeedStack"
+date: 2016-01-21
+author: Adrien LAUER
 description: "Provides bean validation 1.1 (JSR 303 & 349)."
-min-version: "15.11+"
 backend: true
 weight: -1
 tags:
